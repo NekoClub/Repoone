@@ -50,14 +50,14 @@ class SettingsActivity : AppCompatActivity() {
                         Toast.makeText(this, getString(R.string.wrong_pin), Toast.LENGTH_SHORT).show()
                     }
                     newPin.length < 4 -> {
-                        Toast.makeText(this, "PIN must be at least 4 digits", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, getString(R.string.pin_min_length), Toast.LENGTH_SHORT).show()
                     }
                     newPin != confirmPin -> {
                         Toast.makeText(this, getString(R.string.pin_mismatch), Toast.LENGTH_SHORT).show()
                     }
                     else -> {
                         securePrefs.savePin(newPin)
-                        Toast.makeText(this, "PIN changed successfully", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, getString(R.string.pin_changed_success), Toast.LENGTH_SHORT).show()
                         finish()
                     }
                 }

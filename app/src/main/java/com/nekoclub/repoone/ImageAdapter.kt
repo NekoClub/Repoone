@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
@@ -44,7 +45,27 @@ class ImageAdapter(
     override fun getItemCount() = images.size
     
     fun updateImages(newImages: List<VaultImage>) {
+        val diffCallback = ImageDiffCallback(images, newImages)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
         images = newImages
-        notifyDataSetChanged()
+        diffResult.dispatchUpdatesTo(this)
+    }
+    
+    private class ImageDiffCallback(
+        private val oldList: List<VaultImage>,
+        private val newList: List<VaultImage>
+    ) : DiffUtil.Callback() {
+        
+        override fun getOldListSize() = oldList.size
+        
+        override fun getNewListSize() = newList.size
+        
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return oldList[oldItemPosition].id == newList[newItemPosition].id
+        }
+        
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return oldList[oldItemPosition] == newList[newItemPosition]
+        }
     }
 }

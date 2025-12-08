@@ -34,7 +34,7 @@ class AuthActivity : AppCompatActivity() {
             val pin = pinInput.text?.toString() ?: ""
             
             if (pin.length < 4) {
-                Toast.makeText(this, "PIN must be at least 4 digits", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.pin_min_length), Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             

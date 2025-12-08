@@ -11,11 +11,8 @@ class LauncherActivity : AppCompatActivity() {
         
         val securePrefs = SecurePreferences(this)
         
-        val intent = if (securePrefs.hasPin()) {
-            Intent(this, AuthActivity::class.java)
-        } else {
-            Intent(this, AuthActivity::class.java)
-        }
+        // Always route to AuthActivity - it handles both PIN setup (first time) and unlock
+        val intent = Intent(this, AuthActivity::class.java)
         
         startActivity(intent)
         finish()

@@ -39,4 +39,7 @@
     <string name="confirm_delete">Are you sure you want to delete this image?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="pin_min_length">PIN must be at least 4 digits</string>
+    <string name="pin_changed_success">PIN changed successfully</string>
+    <string name="app_version">Version 1.0</string>
 </resources>
