@@ -42,4 +42,10 @@
     <string name="pin_min_length">PIN must be at least 4 digits</string>
     <string name="pin_changed_success">PIN changed successfully</string>
     <string name="app_version">Version 1.0</string>
+    <string name="current_pin">Current PIN</string>
+    <string name="new_pin">New PIN</string>
+    <string name="confirm_new_pin">Confirm New PIN</string>
+    <string name="error_importing_image">Error importing image: %1$s</string>
+    <string name="crop_feature_message">Crop feature - tap corners to crop</string>
+    <string name="error_saving_image">Error saving image: %1$s</string>
 </resources>

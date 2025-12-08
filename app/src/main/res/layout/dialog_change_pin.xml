@@ -8,7 +8,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Current PIN">
+        android:hint="@string/current_pin">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/oldPinInput"
@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:hint="New PIN">
+        android:hint="@string/new_pin">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/newPinInput"
@@ -38,7 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:hint="Confirm New PIN">
+        android:hint="@string/confirm_new_pin">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/confirmPinInput"

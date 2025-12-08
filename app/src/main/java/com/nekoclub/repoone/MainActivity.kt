@@ -183,7 +183,7 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, getString(R.string.image_saved), Toast.LENGTH_SHORT).show()
             }
         } catch (e: Exception) {
-            Toast.makeText(this, "Error importing image: ${e.message}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.error_importing_image, e.message ?: "Unknown error"), Toast.LENGTH_SHORT).show()
         }
     }
     
@@ -195,7 +195,7 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, getString(R.string.image_saved), Toast.LENGTH_SHORT).show()
             }
         } catch (e: Exception) {
-            Toast.makeText(this, "Error importing image: ${e.message}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.error_importing_image, e.message ?: "Unknown error"), Toast.LENGTH_SHORT).show()
         } finally {
             file.delete()
         }

@@ -7,6 +7,10 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ImageAdapter(
     private var images: List<VaultImage>,
@@ -45,10 +49,16 @@ class ImageAdapter(
     override fun getItemCount() = images.size
     
     fun updateImages(newImages: List<VaultImage>) {
-        val diffCallback = ImageDiffCallback(images, newImages)
-        val diffResult = DiffUtil.calculateDiff(diffCallback)
-        images = newImages
-        diffResult.dispatchUpdatesTo(this)
+        // Calculate diff on background thread for better performance
+        CoroutineScope(Dispatchers.Default).launch {
+            val diffCallback = ImageDiffCallback(images, newImages)
+            val diffResult = DiffUtil.calculateDiff(diffCallback)
+            
+            withContext(Dispatchers.Main) {
+                images = newImages
+                diffResult.dispatchUpdatesTo(this@ImageAdapter)
+            }
+        }
     }
     
     private class ImageDiffCallback(

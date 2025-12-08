@@ -54,7 +54,7 @@ class ImageEditorActivity : AppCompatActivity() {
         }
         
         btnCrop.setOnClickListener {
-            Toast.makeText(this, "Crop feature - tap corners to crop", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.crop_feature_message), Toast.LENGTH_SHORT).show()
         }
         
         btnFilter.setOnClickListener {
@@ -184,15 +184,20 @@ class ImageEditorActivity : AppCompatActivity() {
                     Toast.makeText(this, getString(R.string.image_saved), Toast.LENGTH_SHORT).show()
                     finish()
                 } catch (e: Exception) {
-                    Toast.makeText(this, "Error saving image: ${e.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.error_saving_image, e.message ?: "Unknown error"), Toast.LENGTH_SHORT).show()
                 }
             }
         }
     }
     
-    override fun onDestroy() {
-        super.onDestroy()
-        originalBitmap?.recycle()
-        currentBitmap?.recycle()
+    override fun onPause() {
+        super.onPause()
+        // Recycle bitmaps when activity is paused to free memory
+        if (isFinishing) {
+            originalBitmap?.recycle()
+            currentBitmap?.recycle()
+            originalBitmap = null
+            currentBitmap = null
+        }
     }
 }
