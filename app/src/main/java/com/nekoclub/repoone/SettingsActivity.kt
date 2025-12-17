@@ -39,11 +39,8 @@ class SettingsActivity : AppCompatActivity() {
         // Toggle auto-click feature
         switchAutoClick?.setOnCheckedChangeListener { _, isChecked ->
             TouchEmulationService.isAutoClickEnabled = isChecked
-            Toast.makeText(
-                this,
-                if (isChecked) "Auto-click enabled" else "Auto-click disabled",
-                Toast.LENGTH_SHORT
-            ).show()
+            val messageId = if (isChecked) R.string.auto_click_enabled_toast else R.string.auto_click_disabled_toast
+            Toast.makeText(this, getString(messageId), Toast.LENGTH_SHORT).show()
         }
     }
     
@@ -91,7 +88,7 @@ class SettingsActivity : AppCompatActivity() {
         AlertDialog.Builder(this)
             .setTitle(getString(R.string.enable_accessibility))
             .setMessage(getString(R.string.accessibility_service_info))
-            .setPositiveButton("Open Settings") { _, _ ->
+            .setPositiveButton(getString(R.string.open_settings)) { _, _ ->
                 val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
                 startActivity(intent)
             }

@@ -57,4 +57,12 @@
     <string name="accessibility_service_info">Enable the Touch Emulation accessibility service to auto-click send buttons in other apps</string>
     <string name="auto_click_enabled">Enable Auto-Click</string>
     <string name="supported_messaging_apps">com.android.mms,com.google.android.apps.messaging,com.facebook.orca,com.whatsapp,com.instagram.android,com.twitter.android,com.snapchat.android,com.telegram.messenger</string>
+    <string name="overlay_permission_title">Overlay Permission</string>
+    <string name="overlay_permission_message">This app requires overlay permission to display popups over other apps. Grant permission?</string>
+    <string name="grant">Grant</string>
+    <string name="no_image_received">No image received</string>
+    <string name="auto_click_enabled_toast">Auto-click enabled</string>
+    <string name="auto_click_disabled_toast">Auto-click disabled</string>
+    <string name="open_settings">Open Settings</string>
+    <string name="shared_image_imported">Image imported from share</string>
 </resources>

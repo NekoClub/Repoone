@@ -272,16 +272,16 @@ class MainActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!Settings.canDrawOverlays(this)) {
                 AlertDialog.Builder(this)
-                    .setTitle("Overlay Permission")
-                    .setMessage("This app requires overlay permission to display popups over other apps. Grant permission?")
-                    .setPositiveButton("Grant") { _, _ ->
+                    .setTitle(getString(R.string.overlay_permission_title))
+                    .setMessage(getString(R.string.overlay_permission_message))
+                    .setPositiveButton(getString(R.string.grant)) { _, _ ->
                         val intent = Intent(
                             Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
                             Uri.parse("package:$packageName")
                         )
                         startActivity(intent)
                     }
-                    .setNegativeButton("Cancel", null)
+                    .setNegativeButton(getString(R.string.cancel), null)
                     .show()
             } else {
                 startOverlayService()
@@ -305,7 +305,7 @@ class MainActivity : AppCompatActivity() {
         if (sharedImageUriString != null) {
             val uri = Uri.parse(sharedImageUriString)
             importImageFromUri(uri)
-            Toast.makeText(this, "Image imported from share", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.shared_image_imported), Toast.LENGTH_SHORT).show()
         }
     }
     

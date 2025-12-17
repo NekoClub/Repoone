@@ -40,9 +40,9 @@ class TouchEmulationService : AccessibilityService() {
                 // Debounce: Only process if enough time has passed since last click
                 val currentTime = System.currentTimeMillis()
                 if (currentTime - lastClickTime >= DEBOUNCE_DELAY_MS) {
+                    lastClickTime = currentTime // Set immediately to prevent race condition
                     // Look for send buttons and auto-click them
                     findAndClickSendButton()
-                    lastClickTime = currentTime
                 }
             }
         }
