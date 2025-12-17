@@ -38,6 +38,24 @@ An Android application that provides secure image storage with PIN protection, b
 - Glide for image loading
 - Coroutines for async operations
 
+## Getting the APK for Testing
+
+### 📥 Download Pre-built APK (Easiest Method)
+
+The easiest way to get the APK is to download it from GitHub Actions:
+
+1. Go to the [Actions](../../actions) tab
+2. Click on the latest **"Build Android APK"** workflow run
+3. Scroll down to **Artifacts** and download `app-debug`
+4. Extract the ZIP file to get `app-debug.apk`
+
+**Or manually trigger a build:**
+1. Go to [Actions](../../actions) → "Build Android APK"
+2. Click "Run workflow" → Select branch → "Run workflow"
+3. Wait for completion and download the artifact
+
+See [.github/workflows/README.md](.github/workflows/README.md) for detailed instructions.
+
 ## Building the App
 
 ### Prerequisites
