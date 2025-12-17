@@ -1,13 +1,22 @@
-# Repoone - Secure Vault & Image Editor
+# Repoone - Secure Vault & Image Editor with Control Features
 
-An Android application that provides secure image storage with PIN protection, built-in image editing capabilities, and seamless social media sharing.
+An Android application that provides secure image storage with PIN protection, built-in image editing capabilities, and seamless social media sharing. Now with **consensual control features** for BDSM/kink dynamics.
 
 ## Features
 
 ### 🔒 Secure Vault
-- PIN-protected image storage
+- Dual PIN system (User PIN + Admin PIN)
+- Role-based access control (Admin/Controlled User)
 - Encrypted preferences using Android Security Crypto
 - Private storage for sensitive images
+- Complete activity logging
+
+### 🎛️ Admin Control System (Techdomme/Kinkware)
+- **Time-based access restrictions**: Control when vault can be accessed
+- **Check-in requirements**: Mandate regular check-ins at configured intervals
+- **Feature permissions**: Enable/disable individual features for controlled users
+- **Access logging**: Track all vault activities with timestamps
+- **Admin-only settings**: Requires separate Admin PIN to modify restrictions
 
 ### 🎨 Image Editor
 - **Rotate**: Rotate images 90 degrees
@@ -109,11 +118,32 @@ To build a release APK:
 2. Select "Change PIN"
 3. Enter current PIN, new PIN, and confirm
 
+### Setting Up Admin Controls (Optional)
+1. Go to Settings → Admin Settings
+2. Set an Admin PIN (keep separate from User PIN)
+3. Configure user role (Admin or Controlled User)
+4. Enable desired restrictions:
+   - Access time windows
+   - Check-in requirements
+   - Feature permissions
+5. All admin settings require Admin PIN to modify
+
+### For Controlled Users
+- Check-in when prompted (Settings → Check In)
+- Access during allowed time windows only
+- Features may be restricted based on admin settings
+- All activity is logged for admin review
+
 ## Security
 
-- PIN is stored using AndroidX Security Crypto with AES256-GCM encryption
+- Dual PIN system (User PIN + Admin PIN)
+- PINs stored using AndroidX Security Crypto with AES256-GCM encryption
 - Images are stored in app-private storage
 - File provider is used for secure sharing
+- Activity logging with tamper-evident design
+- Role-based access control
+
+**Consent & Safety**: All control features are designed for consensual BDSM/kink dynamics. Always discuss boundaries, have safe signals, and respect limits.
 
 ## Permissions
 

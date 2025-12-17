@@ -6,18 +6,56 @@
 
 The vault provides military-grade security for your private images:
 
-- **PIN Protection**: Set a 4-6 digit PIN to secure your vault
+- **Dual PIN Protection**: Separate Admin PIN and User PIN for control dynamics
+- **Role-Based Access**: Administrator and Controlled User modes
 - **Encrypted Storage**: Uses AndroidX Security Crypto with AES256-GCM encryption
 - **Private Storage**: Images stored in app-private directory, not accessible to other apps
 - **Auto-Lock**: App requires PIN on every launch
+- **Access Logging**: Track all vault activities
 
 #### Security Details:
-- PIN is encrypted and stored using `EncryptedSharedPreferences`
+- PINs are encrypted and stored using `EncryptedSharedPreferences`
 - Master key uses AES256-GCM key scheme
 - Images are stored in `/data/data/com.nekoclub.repoone/files/vault/`
 - File provider ensures secure sharing without exposing file paths
 
-### 2. 🎨 Image Editor
+### 2. 🎛️ Admin Control System (NEW)
+
+**Techdomme/Kinkware Features** - Consensual control and restriction system:
+
+#### Admin Settings
+Access via Settings → Admin Settings (requires Admin PIN)
+
+- **Admin PIN**: Separate PIN for administrator access to control settings
+- **User Role Selection**: Switch between Administrator and Controlled User modes
+- **Feature Permissions**: Enable/disable individual features for controlled users
+  - Add Images
+  - Delete Images
+  - Edit Images
+  - Share Images
+  - Change User PIN
+- **Access Logging**: View complete activity log with timestamps
+
+#### Time-Based Access Restrictions
+- **Scheduled Access**: Set specific hours when vault can be accessed
+- **Configurable Time Windows**: Define start and end times
+- **Automatic Enforcement**: App denies access outside allowed hours
+
+#### Check-In System
+- **Mandatory Check-Ins**: Require user to check in at regular intervals
+- **Configurable Intervals**: Set check-in frequency (in hours)
+- **Overdue Alerts**: User is prompted when check-in is overdue
+- **Last Check-In Tracking**: View when last check-in occurred
+
+#### How Admin Control Works:
+1. First time: Set up Admin PIN in Settings
+2. Configure user role (Admin or Controlled)
+3. Enable desired restrictions
+4. Set permissions for controlled user
+5. All settings are locked behind Admin PIN
+6. Controlled users cannot modify restrictions
+
+### 3. 🎨 Image Editor
 
 Built-in editor with multiple adjustment capabilities:
 
@@ -41,7 +79,7 @@ Built-in editor with multiple adjustment capabilities:
 5. Tap "Rotate" to change orientation
 6. Press "Save" to apply changes permanently
 
-### 3. 📤 Social Media Sharing
+### 4. 📤 Social Media Sharing
 
 Share your vault images to any platform:
 
@@ -68,8 +106,9 @@ Share your vault images to any platform:
 - No permanent copies created outside vault
 - File paths not exposed to receiving apps
 - Permission automatically revoked after sharing
+- **Respects admin permissions**: Can be disabled for controlled users
 
-### 4. 📸 Image Import
+### 5. 📸 Image Import
 
 Multiple ways to add images to your vault:
 
@@ -90,8 +129,9 @@ Multiple ways to add images to your vault:
 3. Select/capture your image
 4. Image automatically encrypted and stored
 5. Appears instantly in your vault
+- **Note**: Can be restricted by admin permissions
 
-### 5. ⚙️ Settings & Management
+### 6. ⚙️ Settings & Management
 
 #### Change PIN
 - Update your vault PIN anytime
@@ -170,6 +210,84 @@ Multiple ways to add images to your vault:
 2. Don't share your PIN
 3. Regularly backup important images (via export)
 4. Clear app cache if device is being sold/given away
+
+## Techdomme/Kinkware Usage
+
+### For Administrators (Dom/Controller)
+
+This app includes consensual control features designed for BDSM/kink dynamics:
+
+#### Initial Setup:
+1. Set up your regular User PIN first
+2. Go to Settings → Admin Settings
+3. Set an Admin PIN (keep this private!)
+4. Configure user role to "Controlled User"
+5. Enable desired restrictions
+
+#### Available Controls:
+- **Access Time Restrictions**: Limit when the vault can be accessed
+- **Check-In Requirements**: Require regular check-ins to maintain access
+- **Feature Permissions**: Control what the user can do:
+  - Adding new images
+  - Deleting images
+  - Editing images
+  - Sharing images
+  - Changing their PIN
+- **Activity Logging**: View complete log of all vault activities
+
+#### Best Practices:
+- Discuss and agree on all restrictions beforehand
+- Start with lenient settings and adjust as needed
+- Keep Admin PIN secure and separate from User PIN
+- Regularly review activity logs
+- Have a safeword/safe signal for emergencies
+- Respect all boundaries and limits
+
+### For Controlled Users (Sub)
+
+#### Your Experience:
+- Log in with your User PIN
+- Features may be restricted based on admin settings
+- You may be required to check in at intervals
+- Access may be limited to certain times
+- All activities are logged
+
+#### Check-In Process:
+1. Open the app during your allowed access time
+2. If check-in is overdue, you'll see a prompt
+3. Go to Settings → Check In
+4. Complete the check-in
+5. Continue using the app normally
+
+#### Important Notes:
+- You cannot change restrictions (admin-only)
+- You cannot disable logging (admin-only)
+- If PIN change is disabled, you'll see a grayed-out button
+- Outside access hours, the app will immediately close
+- Admin can view all your activities in the access log
+
+### Safety & Consent
+
+⚠️ **IMPORTANT SAFETY INFORMATION**:
+
+- All control features are designed for **CONSENSUAL** use only
+- Both parties must agree to all restrictions
+- Have clear safe signals/safewords
+- Regular check-ins about boundaries
+- Admin should never abuse the access log or restrictions
+- This is meant for kink/BDSM dynamics, not abuse
+- If you feel unsafe, seek help immediately
+
+### Technical Implementation
+
+The control features are implemented with security in mind:
+
+- Admin PIN stored separately with encryption
+- Settings cannot be modified without Admin PIN
+- Access logs are tamper-evident
+- Time restrictions are enforced at app launch
+- Feature permissions checked before each action
+- All sensitive data encrypted with AES256-GCM
 
 ## Future Feature Considerations
 
