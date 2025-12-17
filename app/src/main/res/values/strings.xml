@@ -119,4 +119,7 @@
     <string name="not_set">Not Set</string>
     <string name="never">Never</string>
     <string name="always">Always</string>
+    
+    <!-- Confirmation messages -->
+    <string name="confirm_clear_log">Are you sure you want to clear the access log?</string>
 </resources>

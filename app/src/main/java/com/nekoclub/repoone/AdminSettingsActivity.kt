@@ -319,7 +319,7 @@ class AdminSettingsActivity : AppCompatActivity() {
                     securePrefs.hasAdminPin() && currentPin != securePrefs.getAdminPin() -> {
                         Toast.makeText(this, getString(R.string.wrong_admin_pin), Toast.LENGTH_SHORT).show()
                     }
-                    newPin.length < 4 -> {
+                    newPin.length < SecurePreferences.MIN_PIN_LENGTH -> {
                         Toast.makeText(this, getString(R.string.pin_min_length), Toast.LENGTH_SHORT).show()
                     }
                     newPin != confirmPin -> {
@@ -377,7 +377,7 @@ class AdminSettingsActivity : AppCompatActivity() {
     private fun confirmClearAccessLog() {
         AlertDialog.Builder(this)
             .setTitle(getString(R.string.clear_access_log))
-            .setMessage("Are you sure you want to clear the access log?")
+            .setMessage(getString(R.string.confirm_clear_log))
             .setPositiveButton(getString(R.string.yes)) { _, _ ->
                 securePrefs.clearAccessLog()
                 Toast.makeText(this, getString(R.string.log_cleared), Toast.LENGTH_SHORT).show()

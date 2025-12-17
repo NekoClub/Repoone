@@ -153,8 +153,8 @@ class SecurePreferences(context: Context) {
         val currentLog = sharedPreferences.getString(KEY_ACCESS_LOG, "") ?: ""
         val newEntry = "$timestamp:$action\n"
         val updatedLog = newEntry + currentLog
-        // Keep only last 100 entries
-        val entries = updatedLog.split("\n").take(100)
+        // Keep only last MAX_LOG_ENTRIES entries
+        val entries = updatedLog.split("\n").take(MAX_LOG_ENTRIES)
         sharedPreferences.edit().putString(KEY_ACCESS_LOG, entries.joinToString("\n")).apply()
     }
     
@@ -182,6 +182,9 @@ class SecurePreferences(context: Context) {
         private const val KEY_CAN_SHARE_IMAGES = "can_share_images"
         private const val KEY_CAN_CHANGE_PIN = "can_change_pin"
         private const val KEY_ACCESS_LOG = "access_log"
+        
+        private const val MAX_LOG_ENTRIES = 100
+        const val MIN_PIN_LENGTH = 4
         
         const val ROLE_ADMIN = "admin"
         const val ROLE_CONTROLLED = "controlled"

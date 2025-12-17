@@ -332,7 +332,7 @@ class MainActivity : AppCompatActivity() {
         
         val lastCheckIn = securePrefs.getLastCheckInTime()
         val interval = securePrefs.getCheckInIntervalHours()
-        val nextCheckIn = lastCheckIn + (interval * 3600000L)
+        val nextCheckIn = lastCheckIn + (interval * MILLIS_PER_HOUR)
         val now = System.currentTimeMillis()
         
         if (now >= nextCheckIn) {
@@ -354,5 +354,6 @@ class MainActivity : AppCompatActivity() {
     
     companion object {
         const val EXTRA_IMAGE_ID = "extra_image_id"
+        private const val MILLIS_PER_HOUR = 3600000L
     }
 }

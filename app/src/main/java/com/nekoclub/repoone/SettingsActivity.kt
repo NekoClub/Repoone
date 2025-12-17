@@ -77,7 +77,7 @@ class SettingsActivity : AppCompatActivity() {
                     oldPin != securePrefs.getPin() -> {
                         Toast.makeText(this, getString(R.string.wrong_pin), Toast.LENGTH_SHORT).show()
                     }
-                    newPin.length < 4 -> {
+                    newPin.length < SecurePreferences.MIN_PIN_LENGTH -> {
                         Toast.makeText(this, getString(R.string.pin_min_length), Toast.LENGTH_SHORT).show()
                     }
                     newPin != confirmPin -> {
@@ -131,16 +131,20 @@ class SettingsActivity : AppCompatActivity() {
         button.visibility = View.VISIBLE
         val lastCheckIn = securePrefs.getLastCheckInTime()
         val interval = securePrefs.getCheckInIntervalHours()
-        val nextCheckIn = lastCheckIn + (interval * 3600000L)
+        val nextCheckIn = lastCheckIn + (interval * MILLIS_PER_HOUR)
         val now = System.currentTimeMillis()
         
         if (now >= nextCheckIn) {
             button.text = "${getString(R.string.check_in_overdue)} - ${getString(R.string.perform_check_in)}"
             button.setBackgroundColor(resources.getColor(android.R.color.holo_red_light, null))
         } else {
-            val hoursUntil = ((nextCheckIn - now) / 3600000L).toInt()
+            val hoursUntil = ((nextCheckIn - now) / MILLIS_PER_HOUR).toInt()
             button.text = "${getString(R.string.check_in)} (Due in ${hoursUntil}h)"
             button.setBackgroundColor(resources.getColor(android.R.color.holo_green_light, null))
         }
+    }
+    
+    companion object {
+        private const val MILLIS_PER_HOUR = 3600000L
     }
 }
