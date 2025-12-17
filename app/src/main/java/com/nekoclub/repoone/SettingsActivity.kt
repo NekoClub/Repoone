@@ -1,6 +1,8 @@
 package com.nekoclub.repoone
 
+import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -20,9 +22,14 @@ class SettingsActivity : AppCompatActivity() {
         securePrefs = SecurePreferences(this)
         
         val btnChangePin = findViewById<Button>(R.id.btnChangePin)
+        val btnEnableAccessibility = findViewById<Button>(R.id.btnEnableAccessibility)
         
         btnChangePin.setOnClickListener {
             showChangePinDialog()
+        }
+        
+        btnEnableAccessibility?.setOnClickListener {
+            showAccessibilityInfo()
         }
     }
     
@@ -61,6 +68,18 @@ class SettingsActivity : AppCompatActivity() {
                         finish()
                     }
                 }
+            }
+            .setNegativeButton(getString(R.string.cancel), null)
+            .show()
+    }
+    
+    private fun showAccessibilityInfo() {
+        AlertDialog.Builder(this)
+            .setTitle(getString(R.string.enable_accessibility))
+            .setMessage(getString(R.string.accessibility_service_info))
+            .setPositiveButton("Open Settings") { _, _ ->
+                val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+                startActivity(intent)
             }
             .setNegativeButton(getString(R.string.cancel), null)
             .show()

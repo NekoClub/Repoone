@@ -12,6 +12,13 @@
         android:text="@string/change_pin"
         android:layout_marginBottom="8dp" />
 
+    <Button
+        android:id="@+id/btnEnableAccessibility"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/enable_accessibility"
+        android:layout_marginBottom="8dp" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

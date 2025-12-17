@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -83,12 +84,25 @@ class MainActivity : AppCompatActivity() {
             requestStoragePermission()
         }
         
+        // Check for overlay permission and start overlay service if granted
+        checkAndRequestOverlayPermission()
+        
+        // Handle shared image if any
+        handleSharedImage()
+        
         loadImages()
     }
     
     override fun onResume() {
         super.onResume()
         loadImages()
+        
+        // Start overlay service if permission granted and not already running
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (Settings.canDrawOverlays(this) && !OverlayService.isRunning) {
+                startOverlayService()
+            }
+        }
     }
     
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -252,6 +266,47 @@ class MainActivity : AppCompatActivity() {
             }
             .setNegativeButton(getString(R.string.no), null)
             .show()
+    }
+    
+    private fun checkAndRequestOverlayPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!Settings.canDrawOverlays(this)) {
+                AlertDialog.Builder(this)
+                    .setTitle("Overlay Permission")
+                    .setMessage("This app requires overlay permission to display popups over other apps. Grant permission?")
+                    .setPositiveButton("Grant") { _, _ ->
+                        val intent = Intent(
+                            Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                            Uri.parse("package:$packageName")
+                        )
+                        startActivity(intent)
+                    }
+                    .setNegativeButton("Cancel", null)
+                    .show()
+            } else {
+                startOverlayService()
+            }
+        }
+    }
+    
+    private fun startOverlayService() {
+        if (!OverlayService.isRunning) {
+            val intent = Intent(this, OverlayService::class.java)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(intent)
+            } else {
+                startService(intent)
+            }
+        }
+    }
+    
+    private fun handleSharedImage() {
+        val sharedImageUriString = intent.getStringExtra(ShareReceiverActivity.EXTRA_SHARED_IMAGE_URI)
+        if (sharedImageUriString != null) {
+            val uri = Uri.parse(sharedImageUriString)
+            importImageFromUri(uri)
+            Toast.makeText(this, "Image imported from share", Toast.LENGTH_SHORT).show()
+        }
     }
     
     companion object {
