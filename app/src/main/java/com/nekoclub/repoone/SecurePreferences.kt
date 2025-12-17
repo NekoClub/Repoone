@@ -81,21 +81,50 @@ class SecurePreferences(context: Context) {
         return getPinAgeInDays() >= PIN_EXPIRY_DAYS
     }
     
-    // Evil feature: Access logging
+    // Evil feature: Access logging with automatic cleanup
     fun logAccess(success: Boolean) {
         val timestamp = System.currentTimeMillis()
         val key = "access_log_$timestamp"
         sharedPreferences.edit().putString(key, if (success) "success" else "failed").apply()
+        
+        // Clean up logs older than 30 days to prevent bloat
+        cleanupOldLogs()
+    }
+    
+    private fun cleanupOldLogs() {
+        val thirtyDaysAgo = System.currentTimeMillis() - (30L * 24 * 60 * 60 * 1000)
+        val allKeys = sharedPreferences.all.keys
+        val editor = sharedPreferences.edit()
+        
+        allKeys.forEach { key ->
+            if (key.startsWith("access_log_")) {
+                try {
+                    val timestamp = key.removePrefix("access_log_").toLong()
+                    if (timestamp < thirtyDaysAgo) {
+                        editor.remove(key)
+                    }
+                } catch (e: NumberFormatException) {
+                    // Invalid log key, skip
+                }
+            }
+        }
+        
+        editor.apply()
     }
     
     // Evil feature: Validate PIN complexity
     fun isPinComplex(pin: String): Boolean {
+        // First check if PIN contains only digits
+        if (!pin.all { it.isDigit() }) return false
+        
         if (pin.length < 6) return false // Hardline: require 6 digits minimum
         
         // Check for sequential numbers (123456, 654321)
         var sequential = true
         for (i in 1 until pin.length) {
-            if (pin[i].digitToIntOrNull() != pin[i-1].digitToIntOrNull()?.plus(1)) {
+            val current = pin[i].digitToInt()
+            val previous = pin[i-1].digitToInt()
+            if (current != previous + 1) {
                 sequential = false
                 break
             }
@@ -104,7 +133,9 @@ class SecurePreferences(context: Context) {
         
         var reverseSequential = true
         for (i in 1 until pin.length) {
-            if (pin[i].digitToIntOrNull() != pin[i-1].digitToIntOrNull()?.minus(1)) {
+            val current = pin[i].digitToInt()
+            val previous = pin[i-1].digitToInt()
+            if (current != previous - 1) {
                 reverseSequential = false
                 break
             }
