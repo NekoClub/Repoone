@@ -130,8 +130,10 @@ class MainActivity : AppCompatActivity() {
     }
     
     // Evil: No back button - force user to stay in app
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         // Evil: Minimize app instead of closing (trap user in vault)
+        @Suppress("DEPRECATION")
         moveTaskToBack(true)
     }
     

@@ -132,9 +132,11 @@ class AuthActivity : AppCompatActivity() {
     }
     
     // Evil: No back button - user is trapped until correct PIN
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (isSettingPin) {
             // Allow back on initial setup only
+            @Suppress("DEPRECATION")
             super.onBackPressed()
         } else {
             // Trap user - cannot exit without correct PIN
@@ -148,6 +150,11 @@ class AuthActivity : AppCompatActivity() {
         
         lockoutUpdateRunnable = object : Runnable {
             override fun run() {
+                // Check if activity is finishing to prevent memory leaks
+                if (isFinishing || isDestroyed) {
+                    return
+                }
+                
                 if (securePrefs.isLockedOut()) {
                     val remaining = securePrefs.getRemainingLockoutSeconds()
                     titleText.text = getString(R.string.locked_out, remaining)
