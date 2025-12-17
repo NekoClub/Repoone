@@ -55,4 +55,6 @@
     <string name="close_overlay">Close Overlay</string>
     <string name="enable_accessibility">Enable Accessibility</string>
     <string name="accessibility_service_info">Enable the Touch Emulation accessibility service to auto-click send buttons in other apps</string>
+    <string name="auto_click_enabled">Enable Auto-Click</string>
+    <string name="supported_messaging_apps">com.android.mms,com.google.android.apps.messaging,com.facebook.orca,com.whatsapp,com.instagram.android,com.twitter.android,com.snapchat.android,com.telegram.messenger</string>
 </resources>

@@ -19,6 +19,26 @@
         android:text="@string/enable_accessibility"
         android:layout_marginBottom="8dp" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp"
+        android:gravity="center_vertical">
+        
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/auto_click_enabled"
+            android:textSize="14sp" />
+        
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switchAutoClick"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

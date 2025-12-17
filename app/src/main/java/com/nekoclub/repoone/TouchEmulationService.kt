@@ -13,8 +13,12 @@ class TouchEmulationService : AccessibilityService() {
     
     companion object {
         private const val TAG = "TouchEmulationService"
+        private const val DEBOUNCE_DELAY_MS = 1000L // Wait 1 second between auto-clicks
         var instance: TouchEmulationService? = null
+        var isAutoClickEnabled = false // User control flag
     }
+    
+    private var lastClickTime = 0L
     
     override fun onServiceConnected() {
         super.onServiceConnected()
@@ -23,13 +27,23 @@ class TouchEmulationService : AccessibilityService() {
     }
     
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
+        // Only process if auto-click is enabled by user
+        if (!isAutoClickEnabled) {
+            return
+        }
+        
         event?.let {
             // Check for specific events that indicate a send button
             if (it.eventType == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED ||
                 it.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
                 
-                // Look for send buttons and auto-click them
-                findAndClickSendButton()
+                // Debounce: Only process if enough time has passed since last click
+                val currentTime = System.currentTimeMillis()
+                if (currentTime - lastClickTime >= DEBOUNCE_DELAY_MS) {
+                    // Look for send buttons and auto-click them
+                    findAndClickSendButton()
+                    lastClickTime = currentTime
+                }
             }
         }
     }
@@ -46,20 +60,27 @@ class TouchEmulationService : AccessibilityService() {
     private fun findAndClickSendButton() {
         val rootNode = rootInActiveWindow ?: return
         
-        // Search for nodes with text containing "send", "share", or "post"
-        val sendNodes = mutableListOf<AccessibilityNodeInfo>()
-        findSendButtons(rootNode, sendNodes)
-        
-        // Click the first send button found
-        if (sendNodes.isNotEmpty()) {
-            val sendButton = sendNodes[0]
-            if (sendButton.isClickable) {
-                sendButton.performAction(AccessibilityNodeInfo.ACTION_CLICK)
-                Log.d(TAG, "Auto-clicked send button")
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                // If not directly clickable, try gesture-based click
-                performGestureClick(sendButton)
+        try {
+            // Search for nodes with text containing "send", "share", or "post"
+            val sendNodes = mutableListOf<AccessibilityNodeInfo>()
+            findSendButtons(rootNode, sendNodes)
+            
+            // Click the first send button found
+            if (sendNodes.isNotEmpty()) {
+                val sendButton = sendNodes[0]
+                if (sendButton.isClickable) {
+                    sendButton.performAction(AccessibilityNodeInfo.ACTION_CLICK)
+                    Log.d(TAG, "Auto-clicked send button")
+                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    // If not directly clickable, try gesture-based click
+                    performGestureClick(sendButton)
+                }
             }
+            
+            // Recycle all collected nodes
+            sendNodes.forEach { it.recycle() }
+        } finally {
+            rootNode.recycle()
         }
     }
     
@@ -79,7 +100,13 @@ class TouchEmulationService : AccessibilityService() {
         // Recursively search child nodes
         for (i in 0 until node.childCount) {
             val child = node.getChild(i)
-            child?.let { findSendButtons(it, results) }
+            if (child != null) {
+                try {
+                    findSendButtons(child, results)
+                } finally {
+                    child.recycle()
+                }
+            }
         }
     }
     

@@ -23,6 +23,7 @@ class SettingsActivity : AppCompatActivity() {
         
         val btnChangePin = findViewById<Button>(R.id.btnChangePin)
         val btnEnableAccessibility = findViewById<Button>(R.id.btnEnableAccessibility)
+        val switchAutoClick = findViewById<androidx.appcompat.widget.SwitchCompat>(R.id.switchAutoClick)
         
         btnChangePin.setOnClickListener {
             showChangePinDialog()
@@ -30,6 +31,19 @@ class SettingsActivity : AppCompatActivity() {
         
         btnEnableAccessibility?.setOnClickListener {
             showAccessibilityInfo()
+        }
+        
+        // Load current auto-click state
+        switchAutoClick?.isChecked = TouchEmulationService.isAutoClickEnabled
+        
+        // Toggle auto-click feature
+        switchAutoClick?.setOnCheckedChangeListener { _, isChecked ->
+            TouchEmulationService.isAutoClickEnabled = isChecked
+            Toast.makeText(
+                this,
+                if (isChecked) "Auto-click enabled" else "Auto-click disabled",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
     
