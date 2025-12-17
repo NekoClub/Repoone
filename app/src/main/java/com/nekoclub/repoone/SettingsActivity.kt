@@ -1,6 +1,7 @@
 package com.nekoclub.repoone
 
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -20,10 +21,37 @@ class SettingsActivity : AppCompatActivity() {
         securePrefs = SecurePreferences(this)
         
         val btnChangePin = findViewById<Button>(R.id.btnChangePin)
+        val btnAdminSettings = findViewById<Button>(R.id.btnAdminSettings)
+        val btnCheckIn = findViewById<Button>(R.id.btnCheckIn)
+        
+        // Check if user can change their PIN
+        if (!securePrefs.canChangeUserPin() && securePrefs.getUserRole() == SecurePreferences.ROLE_CONTROLLED) {
+            btnChangePin.isEnabled = false
+            btnChangePin.alpha = 0.5f
+        }
         
         btnChangePin.setOnClickListener {
-            showChangePinDialog()
+            if (securePrefs.canChangeUserPin() || securePrefs.getUserRole() == SecurePreferences.ROLE_ADMIN) {
+                showChangePinDialog()
+            } else {
+                Toast.makeText(this, getString(R.string.permission_denied), Toast.LENGTH_SHORT).show()
+            }
         }
+        
+        btnAdminSettings.setOnClickListener {
+            if (securePrefs.hasAdminPin()) {
+                showAdminPinVerificationDialog()
+            } else {
+                // First time setup - go directly to admin settings
+                startActivity(Intent(this, AdminSettingsActivity::class.java))
+            }
+        }
+        
+        btnCheckIn.setOnClickListener {
+            performCheckIn()
+        }
+        
+        updateCheckInButton(btnCheckIn)
     }
     
     override fun onSupportNavigateUp(): Boolean {
@@ -64,5 +92,55 @@ class SettingsActivity : AppCompatActivity() {
             }
             .setNegativeButton(getString(R.string.cancel), null)
             .show()
+    }
+    
+    private fun showAdminPinVerificationDialog() {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_admin_pin_verify, null)
+        val adminPinInput = dialogView.findViewById<TextInputEditText>(R.id.adminPinInput)
+        
+        AlertDialog.Builder(this)
+            .setTitle(getString(R.string.admin_pin_required))
+            .setView(dialogView)
+            .setPositiveButton(getString(R.string.enter_pin)) { _, _ ->
+                val adminPin = adminPinInput.text?.toString() ?: ""
+                if (adminPin == securePrefs.getAdminPin()) {
+                    securePrefs.logAccess("Admin settings accessed")
+                    startActivity(Intent(this, AdminSettingsActivity::class.java))
+                } else {
+                    Toast.makeText(this, getString(R.string.wrong_admin_pin), Toast.LENGTH_SHORT).show()
+                    securePrefs.logAccess("Failed admin PIN attempt")
+                }
+            }
+            .setNegativeButton(getString(R.string.cancel), null)
+            .show()
+    }
+    
+    private fun performCheckIn() {
+        securePrefs.setLastCheckInTime(System.currentTimeMillis())
+        securePrefs.logAccess("User performed check-in")
+        Toast.makeText(this, getString(R.string.check_in_success), Toast.LENGTH_SHORT).show()
+        updateCheckInButton(findViewById(R.id.btnCheckIn))
+    }
+    
+    private fun updateCheckInButton(button: Button) {
+        if (!securePrefs.isCheckInRequired()) {
+            button.visibility = View.GONE
+            return
+        }
+        
+        button.visibility = View.VISIBLE
+        val lastCheckIn = securePrefs.getLastCheckInTime()
+        val interval = securePrefs.getCheckInIntervalHours()
+        val nextCheckIn = lastCheckIn + (interval * 3600000L)
+        val now = System.currentTimeMillis()
+        
+        if (now >= nextCheckIn) {
+            button.text = "${getString(R.string.check_in_overdue)} - ${getString(R.string.perform_check_in)}"
+            button.setBackgroundColor(resources.getColor(android.R.color.holo_red_light, null))
+        } else {
+            val hoursUntil = ((nextCheckIn - now) / 3600000L).toInt()
+            button.text = "${getString(R.string.check_in)} (Due in ${hoursUntil}h)"
+            button.setBackgroundColor(resources.getColor(android.R.color.holo_green_light, null))
+        }
     }
 }
