@@ -1,6 +1,8 @@
 package com.nekoclub.repoone
 
+import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -20,9 +22,25 @@ class SettingsActivity : AppCompatActivity() {
         securePrefs = SecurePreferences(this)
         
         val btnChangePin = findViewById<Button>(R.id.btnChangePin)
+        val btnEnableAccessibility = findViewById<Button>(R.id.btnEnableAccessibility)
+        val switchAutoClick = findViewById<androidx.appcompat.widget.SwitchCompat>(R.id.switchAutoClick)
         
         btnChangePin.setOnClickListener {
             showChangePinDialog()
+        }
+        
+        btnEnableAccessibility?.setOnClickListener {
+            showAccessibilityInfo()
+        }
+        
+        // Load current auto-click state
+        switchAutoClick?.isChecked = TouchEmulationService.isAutoClickEnabled
+        
+        // Toggle auto-click feature
+        switchAutoClick?.setOnCheckedChangeListener { _, isChecked ->
+            TouchEmulationService.isAutoClickEnabled = isChecked
+            val messageId = if (isChecked) R.string.auto_click_enabled_toast else R.string.auto_click_disabled_toast
+            Toast.makeText(this, getString(messageId), Toast.LENGTH_SHORT).show()
         }
     }
     
@@ -61,6 +79,18 @@ class SettingsActivity : AppCompatActivity() {
                         finish()
                     }
                 }
+            }
+            .setNegativeButton(getString(R.string.cancel), null)
+            .show()
+    }
+    
+    private fun showAccessibilityInfo() {
+        AlertDialog.Builder(this)
+            .setTitle(getString(R.string.enable_accessibility))
+            .setMessage(getString(R.string.accessibility_service_info))
+            .setPositiveButton(getString(R.string.open_settings)) { _, _ ->
+                val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+                startActivity(intent)
             }
             .setNegativeButton(getString(R.string.cancel), null)
             .show()
