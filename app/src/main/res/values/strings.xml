@@ -48,4 +48,78 @@
     <string name="error_importing_image">Error importing image: %1$s</string>
     <string name="crop_feature_message">Crop feature - tap corners to crop</string>
     <string name="error_saving_image">Error saving image: %1$s</string>
+    
+    <!-- Admin and Control Features -->
+    <string name="admin_settings">Admin Settings</string>
+    <string name="admin_pin">Admin PIN</string>
+    <string name="set_admin_pin">Set Admin PIN</string>
+    <string name="enter_admin_pin">Enter Admin PIN</string>
+    <string name="confirm_admin_pin">Confirm Admin PIN</string>
+    <string name="admin_pin_required">Admin PIN Required</string>
+    <string name="wrong_admin_pin">Wrong Admin PIN</string>
+    <string name="admin_pin_set">Admin PIN set successfully</string>
+    <string name="user_role">User Role</string>
+    <string name="role_admin">Administrator</string>
+    <string name="role_controlled">Controlled User</string>
+    
+    <!-- Access Restrictions -->
+    <string name="access_restrictions">Access Restrictions</string>
+    <string name="restrict_access">Restrict Access</string>
+    <string name="access_restricted">Access is currently restricted</string>
+    <string name="access_allowed_time">Access allowed only during scheduled time</string>
+    <string name="set_access_time">Set Access Time</string>
+    <string name="access_start_time">Access Start Time</string>
+    <string name="access_end_time">Access End Time</string>
+    <string name="outside_access_hours">Access denied: Outside allowed hours</string>
+    
+    <!-- Check-in System -->
+    <string name="check_in">Check In</string>
+    <string name="check_in_required">Check-in Required</string>
+    <string name="enable_check_in">Enable Check-in Requirement</string>
+    <string name="check_in_interval">Check-in Interval (hours)</string>
+    <string name="last_check_in">Last Check-in</string>
+    <string name="check_in_overdue">Check-in is overdue!</string>
+    <string name="check_in_success">Check-in successful</string>
+    <string name="perform_check_in">Perform Check-in</string>
+    <string name="check_in_due">Check-in due: %1$s</string>
+    
+    <!-- Feature Permissions -->
+    <string name="feature_permissions">Feature Permissions</string>
+    <string name="permission_add_images">Allow Adding Images</string>
+    <string name="permission_delete_images">Allow Deleting Images</string>
+    <string name="permission_edit_images">Allow Editing Images</string>
+    <string name="permission_share_images">Allow Sharing Images</string>
+    <string name="permission_change_pin">Allow Changing User PIN</string>
+    <string name="feature_disabled">This feature has been disabled</string>
+    <string name="permission_denied">Permission denied by administrator</string>
+    
+    <!-- Access Log -->
+    <string name="access_log">Access Log</string>
+    <string name="view_access_log">View Access Log</string>
+    <string name="clear_access_log">Clear Access Log</string>
+    <string name="log_cleared">Access log cleared</string>
+    <string name="no_access_log">No access log entries</string>
+    
+    <!-- Settings Organization -->
+    <string name="basic_settings">Basic Settings</string>
+    <string name="security_settings">Security Settings</string>
+    <string name="control_settings">Control Settings</string>
+    
+    <!-- Time picker -->
+    <string name="select_time">Select Time</string>
+    <string name="hour">Hour</string>
+    <string name="minute">Minute</string>
+    
+    <!-- General -->
+    <string name="enable">Enable</string>
+    <string name="disable">Disable</string>
+    <string name="enabled">Enabled</string>
+    <string name="disabled">Disabled</string>
+    <string name="set">Set</string>
+    <string name="not_set">Not Set</string>
+    <string name="never">Never</string>
+    <string name="always">Always</string>
+    
+    <!-- Confirmation messages -->
+    <string name="confirm_clear_log">Are you sure you want to clear the access log?</string>
 </resources>

@@ -16,6 +16,7 @@ class ImageEditorActivity : AppCompatActivity() {
     private lateinit var adjustmentSeekBar: SeekBar
     private lateinit var adjustmentLabel: TextView
     private lateinit var vaultManager: VaultManager
+    private lateinit var securePrefs: SecurePreferences
     private var originalBitmap: Bitmap? = null
     private var currentBitmap: Bitmap? = null
     private var imageId: String? = null
@@ -30,6 +31,7 @@ class ImageEditorActivity : AppCompatActivity() {
         setContentView(R.layout.activity_image_editor)
         
         vaultManager = VaultManager(this)
+        securePrefs = SecurePreferences(this)
         imageId = intent.getStringExtra(MainActivity.EXTRA_IMAGE_ID)
         
         imageView = findViewById(R.id.imageView)
@@ -181,6 +183,7 @@ class ImageEditorActivity : AppCompatActivity() {
                     FileOutputStream(imageFile).use { out ->
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 95, out)
                     }
+                    securePrefs.logAccess("Saved edited image $id")
                     Toast.makeText(this, getString(R.string.image_saved), Toast.LENGTH_SHORT).show()
                     finish()
                 } catch (e: Exception) {

@@ -33,7 +33,7 @@ class AuthActivity : AppCompatActivity() {
         unlockButton.setOnClickListener {
             val pin = pinInput.text?.toString() ?: ""
             
-            if (pin.length < 4) {
+            if (pin.length < SecurePreferences.MIN_PIN_LENGTH) {
                 Toast.makeText(this, getString(R.string.pin_min_length), Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }

@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Admin Security Section -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/security_settings"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <Button
+            android:id="@+id/btnSetAdminPin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/set_admin_pin"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/user_role"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="4dp" />
+
+        <Spinner
+            android:id="@+id/spinnerUserRole"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider"
+            android:layout_marginVertical="16dp" />
+
+        <!-- Access Restrictions Section -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/access_restrictions"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switchAccessRestriction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/restrict_access"
+            android:layout_marginBottom="8dp" />
+
+        <Button
+            android:id="@+id/btnSetAccessStartTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/set_access_time"
+            android:layout_marginBottom="4dp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tvAccessStartTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/access_start_time"
+            android:textSize="14sp"
+            android:layout_marginBottom="8dp"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/btnSetAccessEndTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/set_access_time"
+            android:layout_marginBottom="4dp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tvAccessEndTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/access_end_time"
+            android:textSize="14sp"
+            android:layout_marginBottom="8dp"
+            android:visibility="gone" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider"
+            android:layout_marginVertical="16dp" />
+
+        <!-- Check-in Section -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/check_in_required"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switchCheckIn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/enable_check_in"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/check_in_interval"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="4dp"
+            android:visibility="gone"
+            android:id="@+id/tvCheckInIntervalLabel" />
+
+        <EditText
+            android:id="@+id/etCheckInInterval"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:hint="24"
+            android:layout_marginBottom="8dp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tvLastCheckIn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/last_check_in"
+            android:textSize="14sp"
+            android:layout_marginBottom="8dp"
+            android:visibility="gone" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider"
+            android:layout_marginVertical="16dp" />
+
+        <!-- Feature Permissions Section -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/feature_permissions"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switchCanAddImages"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/permission_add_images"
+            android:layout_marginBottom="4dp" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switchCanDeleteImages"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/permission_delete_images"
+            android:layout_marginBottom="4dp" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switchCanEditImages"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/permission_edit_images"
+            android:layout_marginBottom="4dp" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switchCanShareImages"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/permission_share_images"
+            android:layout_marginBottom="4dp" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switchCanChangePin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/permission_change_pin"
+            android:layout_marginBottom="8dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider"
+            android:layout_marginVertical="16dp" />
+
+        <!-- Access Log Section -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/access_log"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <Button
+            android:id="@+id/btnViewAccessLog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/view_access_log"
+            android:layout_marginBottom="8dp" />
+
+        <Button
+            android:id="@+id/btnClearAccessLog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/clear_access_log"
+            android:layout_marginBottom="16dp" />
+
+    </LinearLayout>
+</ScrollView>

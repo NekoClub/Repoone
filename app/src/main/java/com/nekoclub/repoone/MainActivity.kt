@@ -22,10 +22,12 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.io.File
+import java.util.Calendar
 
 class MainActivity : AppCompatActivity() {
     
     private lateinit var vaultManager: VaultManager
+    private lateinit var securePrefs: SecurePreferences
     private lateinit var recyclerView: RecyclerView
     private lateinit var emptyView: TextView
     private lateinit var adapter: ImageAdapter
@@ -66,6 +68,17 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         
         vaultManager = VaultManager(this)
+        securePrefs = SecurePreferences(this)
+        
+        // Check access restrictions
+        if (!checkAccessPermission()) {
+            Toast.makeText(this, getString(R.string.outside_access_hours), Toast.LENGTH_LONG).show()
+            finish()
+            return
+        }
+        
+        // Check check-in requirement
+        checkCheckInStatus()
         
         recyclerView = findViewById(R.id.recyclerView)
         emptyView = findViewById(R.id.emptyView)
@@ -79,10 +92,21 @@ class MainActivity : AppCompatActivity() {
         )
         recyclerView.adapter = adapter
         
-        fabAdd.setOnClickListener {
-            requestStoragePermission()
+        // Check if user can add images
+        if (!securePrefs.canAddImages() && securePrefs.getUserRole() == SecurePreferences.ROLE_CONTROLLED) {
+            fabAdd.isEnabled = false
+            fabAdd.alpha = 0.5f
         }
         
+        fabAdd.setOnClickListener {
+            if (securePrefs.canAddImages() || securePrefs.getUserRole() == SecurePreferences.ROLE_ADMIN) {
+                requestStoragePermission()
+            } else {
+                Toast.makeText(this, getString(R.string.permission_denied), Toast.LENGTH_SHORT).show()
+            }
+        }
+        
+        securePrefs.logAccess("Opened vault")
         loadImages()
     }
     
@@ -202,31 +226,50 @@ class MainActivity : AppCompatActivity() {
     }
     
     private fun openImageEditor(image: VaultImage) {
+        if (!securePrefs.canEditImages() && securePrefs.getUserRole() == SecurePreferences.ROLE_CONTROLLED) {
+            Toast.makeText(this, getString(R.string.permission_denied), Toast.LENGTH_SHORT).show()
+            return
+        }
         val intent = Intent(this, ImageEditorActivity::class.java).apply {
             putExtra(EXTRA_IMAGE_ID, image.id)
         }
+        securePrefs.logAccess("Opened image editor for image ${image.id}")
         startActivity(intent)
     }
     
     private fun showImageOptionsDialog(image: VaultImage) {
-        val options = arrayOf(
-            getString(R.string.edit_image),
-            getString(R.string.share_image),
-            getString(R.string.delete_image)
-        )
+        val options = mutableListOf<String>()
+        
+        // Build menu based on permissions
+        if (securePrefs.canEditImages() || securePrefs.getUserRole() == SecurePreferences.ROLE_ADMIN) {
+            options.add(getString(R.string.edit_image))
+        }
+        if (securePrefs.canShareImages() || securePrefs.getUserRole() == SecurePreferences.ROLE_ADMIN) {
+            options.add(getString(R.string.share_image))
+        }
+        if (securePrefs.canDeleteImages() || securePrefs.getUserRole() == SecurePreferences.ROLE_ADMIN) {
+            options.add(getString(R.string.delete_image))
+        }
+        
+        if (options.isEmpty()) {
+            Toast.makeText(this, getString(R.string.permission_denied), Toast.LENGTH_SHORT).show()
+            return
+        }
         
         AlertDialog.Builder(this)
-            .setItems(options) { _, which ->
-                when (which) {
-                    0 -> openImageEditor(image)
-                    1 -> shareImage(image)
-                    2 -> confirmDeleteImage(image)
+            .setItems(options.toTypedArray()) { _, which ->
+                val selected = options[which]
+                when (selected) {
+                    getString(R.string.edit_image) -> openImageEditor(image)
+                    getString(R.string.share_image) -> shareImage(image)
+                    getString(R.string.delete_image) -> confirmDeleteImage(image)
                 }
             }
             .show()
     }
     
     private fun shareImage(image: VaultImage) {
+        securePrefs.logAccess("Shared image ${image.id}")
         val uri = FileProvider.getUriForFile(
             this,
             "${applicationContext.packageName}.fileprovider",
@@ -246,6 +289,7 @@ class MainActivity : AppCompatActivity() {
             .setMessage(getString(R.string.confirm_delete))
             .setPositiveButton(getString(R.string.yes)) { _, _ ->
                 if (vaultManager.deleteImage(image)) {
+                    securePrefs.logAccess("Deleted image ${image.id}")
                     loadImages()
                     Toast.makeText(this, getString(R.string.image_deleted), Toast.LENGTH_SHORT).show()
                 }
@@ -254,7 +298,62 @@ class MainActivity : AppCompatActivity() {
             .show()
     }
     
+    private fun checkAccessPermission(): Boolean {
+        if (!securePrefs.isAccessRestricted()) {
+            return true
+        }
+        
+        val now = System.currentTimeMillis()
+        val startTime = securePrefs.getAccessStartTime()
+        val endTime = securePrefs.getAccessEndTime()
+        
+        // Simple time-of-day check
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = now
+        val currentMinutes = calendar.get(Calendar.HOUR_OF_DAY) * 60 + calendar.get(Calendar.MINUTE)
+        
+        calendar.timeInMillis = startTime
+        val startMinutes = calendar.get(Calendar.HOUR_OF_DAY) * 60 + calendar.get(Calendar.MINUTE)
+        
+        calendar.timeInMillis = endTime
+        val endMinutes = calendar.get(Calendar.HOUR_OF_DAY) * 60 + calendar.get(Calendar.MINUTE)
+        
+        return if (startMinutes <= endMinutes) {
+            currentMinutes in startMinutes..endMinutes
+        } else {
+            currentMinutes >= startMinutes || currentMinutes <= endMinutes
+        }
+    }
+    
+    private fun checkCheckInStatus() {
+        if (!securePrefs.isCheckInRequired()) {
+            return
+        }
+        
+        val lastCheckIn = securePrefs.getLastCheckInTime()
+        val interval = securePrefs.getCheckInIntervalHours()
+        val nextCheckIn = lastCheckIn + (interval * MILLIS_PER_HOUR)
+        val now = System.currentTimeMillis()
+        
+        if (now >= nextCheckIn) {
+            AlertDialog.Builder(this)
+                .setTitle(getString(R.string.check_in_required))
+                .setMessage(getString(R.string.check_in_overdue))
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.check_in)) { _, _ ->
+                    securePrefs.setLastCheckInTime(System.currentTimeMillis())
+                    securePrefs.logAccess("User performed required check-in")
+                    Toast.makeText(this, getString(R.string.check_in_success), Toast.LENGTH_SHORT).show()
+                }
+                .setNegativeButton(getString(R.string.settings)) { _, _ ->
+                    startActivity(Intent(this, SettingsActivity::class.java))
+                }
+                .show()
+        }
+    }
+    
     companion object {
         const val EXTRA_IMAGE_ID = "extra_image_id"
+        private const val MILLIS_PER_HOUR = 3600000L
     }
 }
