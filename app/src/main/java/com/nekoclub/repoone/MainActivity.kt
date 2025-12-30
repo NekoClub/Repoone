@@ -307,7 +307,7 @@ class MainActivity : AppCompatActivity() {
         val startTime = securePrefs.getAccessStartTime()
         val endTime = securePrefs.getAccessEndTime()
         
-        // Simple time-of-day check
+        // Time-of-day based validation with proper overnight handling
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = now
         val currentMinutes = calendar.get(Calendar.HOUR_OF_DAY) * 60 + calendar.get(Calendar.MINUTE)
@@ -318,11 +318,22 @@ class MainActivity : AppCompatActivity() {
         calendar.timeInMillis = endTime
         val endMinutes = calendar.get(Calendar.HOUR_OF_DAY) * 60 + calendar.get(Calendar.MINUTE)
         
-        return if (startMinutes <= endMinutes) {
-            currentMinutes in startMinutes..endMinutes
+        val minutesPerDay = 24 * 60
+        val windowLength = if (startMinutes <= endMinutes) {
+            endMinutes - startMinutes
         } else {
-            currentMinutes >= startMinutes || currentMinutes <= endMinutes
+            (minutesPerDay - startMinutes) + endMinutes
         }
+
+        if (windowLength <= 0) {
+            // No valid access window configured
+            return false
+        }
+
+        // Circular difference from startMinutes, normalized into [0, minutesPerDay)
+        val diffFromStart = (currentMinutes - startMinutes + minutesPerDay) % minutesPerDay
+
+        return diffFromStart in 0..windowLength
     }
     
     private fun checkCheckInStatus() {
@@ -332,7 +343,19 @@ class MainActivity : AppCompatActivity() {
         
         val lastCheckIn = securePrefs.getLastCheckInTime()
         val interval = securePrefs.getCheckInIntervalHours()
-        val nextCheckIn = lastCheckIn + (interval * MILLIS_PER_HOUR)
+        
+        // Safe calculation with overflow protection
+        val safeIntervalHours = interval.toLong().coerceAtLeast(0L)
+        val intervalMillis = if (safeIntervalHours > Long.MAX_VALUE / SecurePreferences.MILLIS_PER_HOUR) {
+            Long.MAX_VALUE
+        } else {
+            safeIntervalHours * SecurePreferences.MILLIS_PER_HOUR
+        }
+        val nextCheckIn = if (Long.MAX_VALUE - lastCheckIn < intervalMillis) {
+            Long.MAX_VALUE
+        } else {
+            lastCheckIn + intervalMillis
+        }
         val now = System.currentTimeMillis()
         
         if (now >= nextCheckIn) {
@@ -354,6 +377,5 @@ class MainActivity : AppCompatActivity() {
     
     companion object {
         const val EXTRA_IMAGE_ID = "extra_image_id"
-        private const val MILLIS_PER_HOUR = 3600000L
     }
 }

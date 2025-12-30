@@ -128,12 +128,19 @@ class AdminSettingsActivity : AppCompatActivity() {
         etCheckInInterval.setOnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
                 val interval = etCheckInInterval.text.toString().toIntOrNull()
-                if (interval != null && interval > 0) {
-                    securePrefs.setCheckInIntervalHours(interval)
-                    securePrefs.logAccess("Admin set check-in interval to $interval hours")
-                } else {
-                    Toast.makeText(this, "Invalid interval", Toast.LENGTH_SHORT).show()
-                    etCheckInInterval.setText(securePrefs.getCheckInIntervalHours().toString())
+                when {
+                    interval == null || interval <= 0 -> {
+                        Toast.makeText(this, getString(R.string.invalid_interval), Toast.LENGTH_SHORT).show()
+                        etCheckInInterval.setText(securePrefs.getCheckInIntervalHours().toString())
+                    }
+                    interval > SecurePreferences.MAX_CHECK_IN_INTERVAL_HOURS -> {
+                        Toast.makeText(this, getString(R.string.interval_too_large), Toast.LENGTH_SHORT).show()
+                        etCheckInInterval.setText(SecurePreferences.MAX_CHECK_IN_INTERVAL_HOURS.toString())
+                    }
+                    else -> {
+                        securePrefs.setCheckInIntervalHours(interval)
+                        securePrefs.logAccess("Admin set check-in interval to $interval hours")
+                    }
                 }
             }
         }
@@ -217,7 +224,7 @@ class AdminSettingsActivity : AppCompatActivity() {
         
         // Admin PIN button text
         btnSetAdminPin.text = if (securePrefs.hasAdminPin()) {
-            getString(R.string.change_pin) + " (${getString(R.string.admin_pin)})"
+            getString(R.string.change_pin_admin)
         } else {
             getString(R.string.set_admin_pin)
         }
@@ -329,7 +336,7 @@ class AdminSettingsActivity : AppCompatActivity() {
                         securePrefs.saveAdminPin(newPin)
                         Toast.makeText(this, getString(R.string.admin_pin_set), Toast.LENGTH_SHORT).show()
                         securePrefs.logAccess("Admin PIN was set/changed")
-                        btnSetAdminPin.text = getString(R.string.change_pin) + " (${getString(R.string.admin_pin)})"
+                        btnSetAdminPin.text = getString(R.string.change_pin_admin)
                     }
                 }
             }

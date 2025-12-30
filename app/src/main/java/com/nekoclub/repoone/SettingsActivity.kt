@@ -6,6 +6,7 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.google.android.material.textfield.TextInputEditText
 
 class SettingsActivity : AppCompatActivity() {
@@ -131,20 +132,36 @@ class SettingsActivity : AppCompatActivity() {
         button.visibility = View.VISIBLE
         val lastCheckIn = securePrefs.getLastCheckInTime()
         val interval = securePrefs.getCheckInIntervalHours()
-        val nextCheckIn = lastCheckIn + (interval * MILLIS_PER_HOUR)
+        
+        // Safe calculation with overflow protection
+        val safeIntervalHours = interval.toLong().coerceAtLeast(0L)
+        val intervalMillis = if (safeIntervalHours > Long.MAX_VALUE / SecurePreferences.MILLIS_PER_HOUR) {
+            Long.MAX_VALUE
+        } else {
+            safeIntervalHours * SecurePreferences.MILLIS_PER_HOUR
+        }
+        val nextCheckIn = if (Long.MAX_VALUE - lastCheckIn < intervalMillis) {
+            Long.MAX_VALUE
+        } else {
+            lastCheckIn + intervalMillis
+        }
         val now = System.currentTimeMillis()
         
         if (now >= nextCheckIn) {
-            button.text = "${getString(R.string.check_in_overdue)} - ${getString(R.string.perform_check_in)}"
-            button.setBackgroundColor(resources.getColor(android.R.color.holo_red_light, null))
+            button.text = getString(
+                R.string.check_in_overdue_with_action,
+                getString(R.string.check_in_overdue),
+                getString(R.string.perform_check_in)
+            )
+            button.setBackgroundColor(ContextCompat.getColor(this, android.R.color.holo_red_light))
         } else {
-            val hoursUntil = ((nextCheckIn - now) / MILLIS_PER_HOUR).toInt()
-            button.text = "${getString(R.string.check_in)} (Due in ${hoursUntil}h)"
-            button.setBackgroundColor(resources.getColor(android.R.color.holo_green_light, null))
+            val hoursUntil = ((nextCheckIn - now) / SecurePreferences.MILLIS_PER_HOUR).toInt()
+            button.text = getString(R.string.check_in_due_in_hours, getString(R.string.check_in), hoursUntil)
+            button.setBackgroundColor(ContextCompat.getColor(this, android.R.color.holo_green_light))
         }
     }
     
     companion object {
-        private const val MILLIS_PER_HOUR = 3600000L
+        // MILLIS_PER_HOUR moved to SecurePreferences
     }
 }

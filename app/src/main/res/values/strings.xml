@@ -122,4 +122,16 @@
     
     <!-- Confirmation messages -->
     <string name="confirm_clear_log">Are you sure you want to clear the access log?</string>
+    
+    <!-- Validation messages -->
+    <string name="invalid_interval">Invalid interval</string>
+    <string name="interval_too_large">Check-in interval too large (max 720 hours)</string>
+    
+    <!-- Check-in button text with formatting -->
+    <string name="check_in_overdue_with_action">%1$s - %2$s</string>
+    <string name="check_in_due_in_hours">%1$s (Due in %2$dh)</string>
+    
+    <!-- Admin PIN button text -->
+    <string name="change_pin_admin">Change PIN (Admin)</string>
+    <string name="change_pin_with_admin_pin">%1$s (%2$s)</string>
 </resources>

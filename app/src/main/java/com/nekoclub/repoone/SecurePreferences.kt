@@ -185,6 +185,8 @@ class SecurePreferences(context: Context) {
         
         private const val MAX_LOG_ENTRIES = 100
         const val MIN_PIN_LENGTH = 4
+        const val MAX_CHECK_IN_INTERVAL_HOURS = 720 // 30 days
+        const val MILLIS_PER_HOUR = 3600000L
         
         const val ROLE_ADMIN = "admin"
         const val ROLE_CONTROLLED = "controlled"
