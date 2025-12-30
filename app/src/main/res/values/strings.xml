@@ -133,5 +133,4 @@
     
     <!-- Admin PIN button text -->
     <string name="change_pin_admin">Change PIN (Admin)</string>
-    <string name="change_pin_with_admin_pin">%1$s (%2$s)</string>
 </resources>

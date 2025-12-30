@@ -325,15 +325,15 @@ class MainActivity : AppCompatActivity() {
             (minutesPerDay - startMinutes) + endMinutes
         }
 
-        if (windowLength <= 0) {
-            // No valid access window configured
+        if (windowLength < 0) {
+            // Invalid access window configuration
             return false
         }
 
         // Circular difference from startMinutes, normalized into [0, minutesPerDay)
         val diffFromStart = (currentMinutes - startMinutes + minutesPerDay) % minutesPerDay
 
-        return diffFromStart in 0..windowLength
+        return diffFromStart < windowLength
     }
     
     private fun checkCheckInStatus() {
