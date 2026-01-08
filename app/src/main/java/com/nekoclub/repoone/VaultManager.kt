@@ -47,4 +47,18 @@ class VaultManager(private val context: Context) {
     fun getImageFile(imageId: String): File {
         return File(vaultDir, "$imageId.jpg")
     }
+    
+    // Evil: Wipe entire vault (for auto-wipe on max failed attempts)
+    fun wipeAllImages(): Boolean {
+        return try {
+            vaultDir.listFiles()?.forEach { file ->
+                if (file.isFile) {
+                    file.delete()
+                }
+            }
+            true
+        } catch (e: Exception) {
+            false
+        }
+    }
 }

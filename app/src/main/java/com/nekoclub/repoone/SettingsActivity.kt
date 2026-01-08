@@ -67,11 +67,20 @@ class SettingsActivity : AppCompatActivity() {
                     oldPin != securePrefs.getPin() -> {
                         Toast.makeText(this, getString(R.string.wrong_pin), Toast.LENGTH_SHORT).show()
                     }
-                    newPin.length < 4 -> {
-                        Toast.makeText(this, getString(R.string.pin_min_length), Toast.LENGTH_SHORT).show()
+                    newPin.length < 6 -> {
+                        // Evil: Enforce 6 digit minimum
+                        Toast.makeText(this, getString(R.string.pin_min_length_evil), Toast.LENGTH_LONG).show()
+                    }
+                    !securePrefs.isPinComplex(newPin) -> {
+                        // Evil: Enforce PIN complexity
+                        Toast.makeText(this, getString(R.string.pin_complexity_required), Toast.LENGTH_LONG).show()
                     }
                     newPin != confirmPin -> {
                         Toast.makeText(this, getString(R.string.pin_mismatch), Toast.LENGTH_SHORT).show()
+                    }
+                    newPin == oldPin -> {
+                        // Evil: Prevent reusing same PIN
+                        Toast.makeText(this, getString(R.string.pin_must_be_different), Toast.LENGTH_SHORT).show()
                     }
                     else -> {
                         securePrefs.savePin(newPin)

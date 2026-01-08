@@ -2,12 +2,30 @@
 
 An Android application that provides secure image storage with PIN protection, built-in image editing capabilities, and seamless social media sharing.
 
+> **⚠️ HARDLINE SECURITY MODE ENABLED**
+>
+> This vault implements aggressive security measures for maximum protection:
+> - **6-digit PIN** with complexity requirements (no sequential/repeated digits)
+> - **Progressive lockouts** after failed attempts (10s → 30s → 2min)
+> - **Automatic vault wipe** after 5 failed PIN attempts (permanent data loss)
+> - **Mandatory PIN changes** every 30 days with persistent reminders
+> - **No PIN recovery option** - forgotten PINs result in permanent data loss
+> - **Screenshot/screen recording disabled** throughout the app
+> - **Anti-debugging protection** prevents tampering
+>
+> These features prioritize security over convenience. See [EVIL_FEATURES.md](EVIL_FEATURES.md) for detailed documentation.
+
 ## Features
 
-### 🔒 Secure Vault
-- PIN-protected image storage
-- Encrypted preferences using Android Security Crypto
+### 🔒 Hardline Security Vault
+- **Ruthless PIN authentication** with progressive lockouts and auto-wipe
+- **Complex PIN requirements** (6+ digits, no simple patterns)
+- **Forced PIN expiry** every 30 days
+- Encrypted preferences using Android Security Crypto (AES-256-GCM)
 - Private storage for sensitive images
+- Screenshot and screen recording prevention
+- Anti-debugging and tampering detection
+- Comprehensive access logging
 
 ### 🎨 Image Editor
 - **Rotate**: Rotate images 90 degrees
@@ -51,6 +69,24 @@ An Android application that provides secure image storage with PIN protection, b
 - Security Crypto for encrypted storage
 - Glide for image loading
 - Coroutines for async operations
+
+## Getting the APK for Testing
+
+### 📥 Download Pre-built APK (Easiest Method)
+
+The easiest way to get the APK is to download it from GitHub Actions:
+
+1. Go to the [Actions](../../actions) tab
+2. Click on the latest **"Build Android APK"** workflow run
+3. Scroll down to **Artifacts** and download `app-debug`
+4. Extract the ZIP file to get `app-debug.apk`
+
+**Or manually trigger a build:**
+1. Go to [Actions](../../actions) → "Build Android APK"
+2. Click "Run workflow" → Select branch → "Run workflow"
+3. Wait for completion and download the artifact
+
+See [.github/workflows/README.md](.github/workflows/README.md) for detailed instructions.
 
 ## Building the App
 
@@ -142,13 +178,55 @@ To build a release APK:
 ### Changing PIN
 1. Tap the settings icon (top right)
 2. Select "Change PIN"
-3. Enter current PIN, new PIN, and confirm
+3. Enter current PIN, new PIN (must be 6+ digits with no simple patterns), and confirm
+4. Note: New PIN must be different from old PIN and meet complexity requirements
 
 ## Security
 
-- PIN is stored using AndroidX Security Crypto with AES256-GCM encryption
-- Images are stored in app-private storage
-- File provider is used for secure sharing
+### Hardline Security Features
+
+**Authentication:**
+- 6-digit minimum PIN with complexity validation
+- No sequential numbers (123456, etc.)
+- No repeated digits (111111, etc.)
+- Cannot reuse previous PIN
+
+**Progressive Lockout System:**
+- 1st failed attempt: Warning
+- 2nd failed attempt: 10-second lockout
+- 3rd failed attempt: 30-second lockout
+- 4th failed attempt: 2-minute lockout
+- 5th failed attempt: **Automatic vault wipe (all images permanently deleted)**
+
+**Forced PIN Expiry:**
+- PINs expire after 30 days
+- Warning reminders start at day 25
+- Non-dismissible enforcement at day 30
+- Aggressive nagging to ensure compliance
+
+**Anti-Tampering:**
+- Debugger detection with automatic exit
+- Screenshot and screen recording prevention (FLAG_SECURE)
+- No back button escape during authentication
+- Access attempt logging with timestamps
+
+**Data Protection:**
+- PIN stored using AndroidX Security Crypto with AES256-GCM encryption
+- Images stored in app-private storage
+- File provider used for secure sharing
+- No PIN recovery mechanism (forgotten PIN = permanent data loss)
+
+### Security Philosophy
+
+This app implements a **"security-first, convenience-last"** approach suitable for:
+- High-security environments
+- Sensitive document storage
+- Enterprise/corporate deployments
+- Users requiring maximum privacy protection
+
+**⚠️ Important:** There is no PIN recovery option. If you forget your PIN or exceed 5 failed attempts, all vault contents are permanently deleted. This is by design for maximum security.
+
+For detailed security feature documentation, see [EVIL_FEATURES.md](EVIL_FEATURES.md).
 
 ## Permissions
 

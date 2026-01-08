@@ -65,4 +65,24 @@
     <string name="auto_click_disabled_toast">Auto-click disabled</string>
     <string name="open_settings">Open Settings</string>
     <string name="shared_image_imported">Image imported from share</string>
+    
+    <!-- Evil strings: Ruthless security and product behavior -->
+    <string name="pin_min_length_evil">PIN must be at least 6 digits for maximum security</string>
+    <string name="pin_complexity_required">PIN too weak! Cannot contain sequential numbers (123456), repeated digits (111111), or simple patterns. Choose a stronger PIN.</string>
+    <string name="wrong_pin_attempts">Wrong PIN! Attempt %1$d of %2$d</string>
+    <string name="too_many_attempts">Too many failed attempts (%1$d/%2$d). Locked out for %3$d seconds.</string>
+    <string name="lockout_wait">Account locked. Please wait %1$d seconds.</string>
+    <string name="locked_out">LOCKED OUT - %1$d seconds remaining</string>
+    <string name="vault_wiped_title">Security Breach - Vault Wiped</string>
+    <string name="vault_wiped_message">Maximum failed PIN attempts exceeded. All vault contents have been permanently deleted for security. You must set a new PIN.</string>
+    <string name="pin_expired_title">PIN Expired</string>
+    <string name="pin_expired_message">Your PIN is %1$d days old. For security, PINs must be changed every 30 days.</string>
+    <string name="pin_expired_force">Your PIN has expired (30+ days old). You must change it immediately to continue using the vault.</string>
+    <string name="change_pin_now">Change PIN Now</string>
+    <string name="ok">OK</string>
+    <string name="pin_expiring_warning">Security Warning: Your PIN expires in %1$d days. Change it soon in Settings.</string>
+    <string name="pin_expiring_nag">REMINDER: Your PIN expires in %1$d days! Change it in Settings to avoid lockout.</string>
+    <string name="pin_required_no_exit">You must enter your PIN to access the vault. There is no way to exit without authentication.</string>
+    <string name="pin_must_be_different">New PIN must be different from your current PIN</string>
+    <string name="debugger_detected">Security alert: Debugger detected. Application closing for protection.</string>
 </resources>
