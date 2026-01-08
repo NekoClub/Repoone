@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/overlay_background"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <!-- Drag Handle / Main Button -->
+    <ImageView
+        android:id="@+id/overlayDragHandle"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:padding="8dp"
+        android:src="@android:drawable/ic_menu_gallery"
+        android:contentDescription="@string/overlay_icon"
+        android:background="?attr/selectableItemBackgroundBorderless" />
+
+    <ImageView
+        android:id="@+id/btnExpand"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_gravity="center"
+        android:padding="4dp"
+        android:src="@android:drawable/arrow_down_float"
+        android:contentDescription="@string/expand"
+        android:background="?attr/selectableItemBackgroundBorderless" />
+
+    <!-- Expanded Panel -->
+    <LinearLayout
+        android:id="@+id/expandedPanel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:padding="8dp">
+
+        <Button
+            android:id="@+id/btnOpenApp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/open_app"
+            android:textSize="12sp"
+            style="@style/Widget.AppCompat.Button.Borderless" />
+
+        <Button
+            android:id="@+id/btnClose"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/close_overlay"
+            android:textSize="12sp"
+            style="@style/Widget.AppCompat.Button.Borderless" />
+
+    </LinearLayout>
+
+</LinearLayout>
