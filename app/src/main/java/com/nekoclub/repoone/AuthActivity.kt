@@ -215,7 +215,15 @@ class AuthActivity : AppCompatActivity() {
     }
     
     private fun openMainActivity() {
-        startActivity(Intent(this, MainActivity::class.java))
+        val intent = Intent(this, MainActivity::class.java)
+        
+        // Pass through any shared image URI
+        val sharedImageUri = getIntent().getStringExtra(ShareReceiverActivity.EXTRA_SHARED_IMAGE_URI)
+        if (sharedImageUri != null) {
+            intent.putExtra(ShareReceiverActivity.EXTRA_SHARED_IMAGE_URI, sharedImageUri)
+        }
+        
+        startActivity(intent)
         finish()
     }
     
